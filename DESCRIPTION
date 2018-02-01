@@ -6,7 +6,9 @@ Author: Cedric Mondy
 Maintainer: Cedric Mondy <cedric.mondy@afbiodiversite.fr>
 Description: This package create the export files necessary to upload a new version of
     an indicator to the SEEE server.
-Imports: dplyr (>= 0.7.4)
+Imports: 
+    dplyr (>= 0.7.4),
+    rmarkdown (>= 1.8)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

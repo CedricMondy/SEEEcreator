@@ -13,6 +13,7 @@
 #'
 #' @importFrom dplyr "%>%"
 #' @importFrom utils zip
+#' @importFrom rmarkdown render
 #' @export
 create_SEEE_export <- function(indic, paramFiles, inputFiles) {
 
@@ -58,6 +59,12 @@ create_SEEE_export <- function(indic, paramFiles, inputFiles) {
                        indic, "_", vIndic, "_Import_export.zip"),
       files = c(inputFiles,
                 paste0(indic, "_", vIndic, "_resultats.csv")))
+
+  # Create the exchange file format pdf document
+  render(input       = paste0(indic, "_Format_echange.Rmd"),
+         output_file = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
+                              indic, "_", vIndic, "_Format_echange.pdf"),
+         encoding = "UTF-8")
 
   # Clean up the directory
   file.remove(paste0(indic, "_", vIndic) %>%

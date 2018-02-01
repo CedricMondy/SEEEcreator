@@ -2,4 +2,5 @@
 
 export(create_SEEE_export)
 importFrom(dplyr,"%>%")
+importFrom(rmarkdown,render)
 importFrom(utils,zip)
