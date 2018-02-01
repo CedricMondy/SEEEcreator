@@ -66,6 +66,9 @@ create_SEEE_export <- function(indic, paramFiles, inputFiles) {
                               indic, "_", vIndic, "_Format_echange.pdf"),
          encoding = "UTF-8")
 
+  # Create the JSON file
+  generate_json(indic = indic, vIndic = vIndic)
+
   # Clean up the directory
   file.remove(paste0(indic, "_", vIndic) %>%
                 paste0(., c("_valid.r", "_valid_fun.RData", "_valid_consult.r",
