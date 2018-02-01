@@ -1,5 +1,7 @@
 create_dir <- function(path) {
   if (!dir.exists(path)) dir.create(path, recursive = TRUE)
+
+  return(NULL)
 }
 
 copy_files <- function(files, from = NULL, to = NULL) {
@@ -16,4 +18,6 @@ copy_files <- function(files, from = NULL, to = NULL) {
   }
 
   file.copy(from = from2, to = to2)
+
+  return(NULL)
 }

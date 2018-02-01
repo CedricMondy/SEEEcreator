@@ -77,4 +77,6 @@ generate_scripts <- function(source, documents = c("server", "user", "data"), ve
     save_document(d)
   }
   rm()
+
+  return(NULL)
 }
