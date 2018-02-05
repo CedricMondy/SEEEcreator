@@ -4,7 +4,7 @@
 \alias{create_SEEE_export}
 \title{Create a SEEE export}
 \usage{
-create_SEEE_export(indic, paramFiles, inputFiles)
+create_SEEE_export(indic, additionalInput = NULL)
 }
 \arguments{
 \item{indic}{the name of the indicator as it is in the names of the

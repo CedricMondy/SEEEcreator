@@ -15,10 +15,16 @@
 #' @importFrom utils zip
 #' @importFrom rmarkdown render
 #' @export
-create_SEEE_export <- function(indic, paramFiles, inputFiles) {
+create_SEEE_export <- function(indic, additionalInput = NULL) {
 
   # Get the indicator version
   vIndic <- extract_version(indic)
+
+  # Get the parameter files
+  paramFiles <- list.files(pattern = paste0(indic, "_params"))
+
+  # Get the input files
+  inputFiles <- c(list.files(pattern = paste0(indic, "_entree")), additionalInput)
 
   # Generate user and server files
   generate_scripts(source = paste0(indic, "_Validation.r"), version = vIndic)
@@ -31,11 +37,6 @@ create_SEEE_export <- function(indic, paramFiles, inputFiles) {
   }
   create_dir(path = paste0("serverSEEE_", vIndic, "/",
                            indic, "/Documentation"))
-
-  # Copy the JSON file
-  copy_files(files = paste0(indic, "_", vIndic, ".json"),
-             to    = paste0("serverSEEE_", vIndic))
-
 
   # Copy the server files
   copy_files(files = paste0(indic, "_", vIndic) %>%
@@ -58,7 +59,7 @@ create_SEEE_export <- function(indic, paramFiles, inputFiles) {
   zip(zipfile = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
                        indic, "_", vIndic, "_Import_export.zip"),
       files = c(inputFiles,
-                paste0(indic, "_", vIndic, "_resultats.csv")))
+                list.files(pattern = paste0(indic, "_", vIndic, "_resultats"))))
 
   # Create the exchange file format pdf document
   render(input       = paste0(indic, "_Format_echange.Rmd"),
@@ -70,8 +71,5 @@ create_SEEE_export <- function(indic, paramFiles, inputFiles) {
   generate_json(indic = indic, vIndic = vIndic)
 
   # Clean up the directory
-  file.remove(paste0(indic, "_", vIndic) %>%
-                paste0(., c("_valid.r", "_valid_fun.RData", "_valid_consult.r",
-                            "_calc.r", "_calc_fun.RData", "_calc_consult.r",
-                            "_resultats.csv")))
+  file.remove(list.files(pattern = "_valid|_calc|_resultats"))
 }
