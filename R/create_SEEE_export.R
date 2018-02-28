@@ -5,11 +5,6 @@
 #'
 #' @param indic the name of the indicator as it is in the names of the
 #'   development files (ending with _valid.r and _calc.r)
-#' @param paramFiles a character vector with the names of the tables and data
-#'   that are not user-supplied but necessary for the indicator to be calculated
-#'   (e.g. indicator value tables)
-#' @param inputFiles a character vector with the names of the files used to
-#'   provide exemples in the import_export documentation
 #'
 #' @importFrom dplyr "%>%"
 #' @importFrom utils zip
@@ -59,7 +54,8 @@ create_SEEE_export <- function(indic, additionalInput = NULL) {
   zip(zipfile = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
                        indic, "_", vIndic, "_Import_export.zip"),
       files = c(inputFiles,
-                list.files(pattern = paste0(indic, "_", vIndic, "_resultats"))))
+                list.files(pattern = paste0(indic, "_", vIndic, "_resultats")),
+                list.files(pattern = paste0(indic, "_supplement"))))
 
   # Create the exchange file format pdf document
   render(input       = paste0(indic, "_Format_echange.Rmd"),

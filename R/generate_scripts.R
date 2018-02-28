@@ -64,7 +64,7 @@ generate_scripts <- function(source, documents = c("server", "user", "data"), ve
 
       rm(list = ls()[!ls() %in% c("output", "temp_output")])
 
-      source(file = temp_output, echo = FALSE, local = TRUE)
+      source(file = temp_output,local = TRUE, echo = FALSE)
 
       list1 <- ls()[!ls() %in% c("output", "temp_output")]
 
