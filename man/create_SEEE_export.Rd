@@ -4,11 +4,15 @@
 \alias{create_SEEE_export}
 \title{Create a SEEE export}
 \usage{
-create_SEEE_export(indic, additionalInput = NULL)
+create_SEEE_export(indic, additionalInput = NULL, test = FALSE)
 }
 \arguments{
 \item{indic}{the name of the indicator as it is in the names of the
 development files (ending with _valid.r and _calc.r)}
+
+\item{additionalInput}{values of additional inputs (not files, e.g. TRUE/FALSE)}
+
+\item{test}{logical should the warnings be printed (useful when testing)}
 }
 \description{
 Create the folder and files necessary to upload to the SEEE server in order

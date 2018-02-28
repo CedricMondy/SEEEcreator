@@ -1,7 +1,19 @@
 #' @importFrom dplyr "%>%"
-generate_scripts <- function(source, documents = c("server", "user", "data"), version) {
+generate_scripts <- function(source,
+                             documents = c("server", "user", "data"),
+                             version,
+                             test = FALSE) {
 
   source_content <- readLines(con = source, skipNul = FALSE)
+
+  optLoc <- which(grepl("options(warn", source_content, fixed = TRUE))
+
+  if(test) {
+    source_content[optLoc] <- paste0("#", source_content[optLoc])
+  } else {
+    source_content[optLoc] <- gsub(pattern = "#", replacement = "",
+                                   x = source_content[optLoc])
+  }
 
   element_location <- 1:length(source_content)
 

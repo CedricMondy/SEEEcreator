@@ -6,11 +6,15 @@
 #' @param indic the name of the indicator as it is in the names of the
 #'   development files (ending with _valid.r and _calc.r)
 #'
+#' @param additionalInput values of additional inputs (not files, e.g. TRUE/FALSE)
+#'
+#' @param test logical should the warnings be printed (useful when testing)
+#'
 #' @importFrom dplyr "%>%"
 #' @importFrom utils zip
 #' @importFrom rmarkdown render
 #' @export
-create_SEEE_export <- function(indic, additionalInput = NULL) {
+create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
   # Get the indicator version
   vIndic <- extract_version(indic)
@@ -22,8 +26,8 @@ create_SEEE_export <- function(indic, additionalInput = NULL) {
   inputFiles <- c(list.files(pattern = paste0(indic, "_entree")), additionalInput)
 
   # Generate user and server files
-  generate_scripts(source = paste0(indic, "_Validation.r"), version = vIndic)
-  generate_scripts(source = paste0(indic, "_Calcul.r"),     version = vIndic)
+  generate_scripts(source = paste0(indic, "_Validation.r"), version = vIndic, test = test)
+  generate_scripts(source = paste0(indic, "_Calcul.r"),     version = vIndic, test = test)
 
   # Create the folder structure
   if (dir.exists(paste0("serverSEEE_", vIndic))) {
