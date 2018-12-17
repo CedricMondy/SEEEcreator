@@ -6,6 +6,10 @@ generate_scripts <- function(source,
 
   source_content <- readLines(con = source, skipNul = FALSE)
 
+  section_location <- which(grepl("#>", source_content))
+
+  # Comment/uncomment the line controlling the printing of warnings
+
   optLoc <- which(grepl("options(warn", source_content, fixed = TRUE))
 
   if(test) {
@@ -15,15 +19,47 @@ generate_scripts <- function(source,
                                    x = source_content[optLoc])
   }
 
-  element_location <- 1:length(source_content)
+  # Automatic filling of header fields
+  ## Date
+  dateLoc <- which(grepl("# Date", source_content))
+  source_content[dateLoc] <- gsub(pattern = ":",
+                                  replacement = paste0(": ", Sys.Date()),
+                                  x = source_content[dateLoc])
+  ## Index version
+  vLoc <- which(grepl("# Version", source_content))
+  source_content[vLoc] <- gsub(pattern = ":",
+                               replacement = paste0(": ",
+                                                    gsub("v", "", version)),
+                               x = source_content[vLoc])
+  ## R version used
+  RLoc <- which(grepl("# Interpreteur", source_content))
+  source_content[RLoc] <- gsub(pattern = ":",
+                               replacement = paste0(": ",
+                                                    R.Version()$version.string),
+                               x = source_content[RLoc])
+  ## Packages needed
+  depLoc   <- which(grepl("# Pre-requis", source_content))
+  pkgs   <- source_content[which(grepl("dependencies <-",
+                                       source_content))] %>%
+    gsub(pattern     = "dependencies <- ",
+         replacement = "")                               %>%
+    (function(x) parse(text = x))                        %>%
+    eval()
+  source_content[depLoc] <- gsub(pattern     = ":",
+                                 replacement = paste0(": Packages ",
+                                                      paste(pkgs,
+                                                            collapse = ", ")
+                                                      ),
+                                 x = source_content[depLoc])
 
-  section_location <- which(grepl("#>", source_content))
+  # Separate the user, server and data sections
+  element_location <- 1:length(source_content)
 
   element_section <- lapply(section_location,
                             function(i){
                               ifelse(element_location >= i, i, FALSE)
                               }) %>%
-    do.call(what = cbind) %>%
+    do.call(what = cbind)        %>%
     apply(MARGIN = 1, max)
   element_section <- gsub(source_content[element_section],
                           pattern     = "#> ",
@@ -34,8 +70,30 @@ generate_scripts <- function(source,
 
     document_content <- source_content[is_document_part &
                                          !grepl("#>", source_content)]
+    fileLoc <- which(grepl("# Fichiers lies", document_content))
+    dataFiles <- NULL
 
     if (d %in% "server") {
+      ## Related files
+      if (any(grepl("data", source_content[section_location]))) {
+        dataFiles <- gsub(pattern = "Calcul.r|Calcul.R",
+                          replacement = paste0(version,
+                                               "_calc_fun.RData"),
+                          x = source) %>%
+          gsub(pattern = "Validation.r|Validation.R",
+               replacement = paste0(version,
+                                    "_valid_fun.RData")
+          )
+      }
+
+      document_content[fileLoc] <- gsub(pattern = ":",
+                                        replacement = paste0(": ",
+                                                             paste(dataFiles,
+                                                                   collapse = ", ")
+                                                           ),
+                                      x = document_content[fileLoc]
+                                      )
+
       output <- gsub(x           = source,
                      pattern     = "Calcul",
                      replacement = paste0(version, "_calc"),
@@ -48,6 +106,17 @@ generate_scripts <- function(source,
       writeLines(text = document_content, con = output)
     }
     if (d %in% "user") {
+      ## Related files
+      dataFiles <- list.files(pattern = "_params_")
+
+      document_content[fileLoc] <- gsub(pattern = ":",
+                                      replacement = paste0(": ",
+                                                           paste(dataFiles,
+                                                                 collapse = ", ")
+                                      ),
+                                      x = document_content[fileLoc]
+      )
+
       output <- gsub(x           = source,
                      pattern     = "Calcul",
                      replacement = paste0(version, "_calc_consult"),

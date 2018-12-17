@@ -1,0 +1,27 @@
+{
+ "type" 		: "",
+ "dossier"		: "",
+ "version"		: "",
+ "script"		: "",
+ "validation"	: "",
+ "langage"		: "R",
+ "entree"		: 	{
+					"fichier_entree" : 	{
+										"type" 	: "file",
+										"label" : ""
+										}
+					},
+ "sortie"       : {
+                  "complementaire" : {
+                            "type" : "checkbox",
+                            "label" : ""
+                          }
+                  },
+ "synchrone"	: "",
+ "documentation":	{
+					"format des fichiers d'entree et de sortie" : "",
+					"acces algorithmes" : "",
+					"jeu de donnees de reference" 	: ""
+					},
+ "commentaire" 	: ""
+}

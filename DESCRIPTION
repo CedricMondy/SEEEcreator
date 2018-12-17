@@ -1,15 +1,16 @@
 Package: SEEEcreator
 Type: Package
 Title: Create an export for the SEEE server
-Version: 0.1.0
+Version: 0.1.3
 Author: Cedric Mondy
 Maintainer: Cedric Mondy <cedric.mondy@afbiodiversite.fr>
-Description: This package create the export files necessary to upload a new version of
+Description: This package creates the export files necessary to upload a new version of
     an indicator to the SEEE server.
-Imports: 
+Imports:
     dplyr (>= 0.7.4),
-    rmarkdown (>= 1.8)
+    rmarkdown (>= 1.8),
+    tinytex
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
