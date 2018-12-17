@@ -30,21 +30,20 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
   generate_scripts(source = paste0(indic, "_Calcul.r"),     version = vIndic, test = test)
 
   # Create the folder structure
-  if (dir.exists(paste0("serverSEEE_", vIndic))) {
-    unlink(x         = paste0("serverSEEE_", vIndic),
+  if (dir.exists(paste0(indic, " ", vIndic))) {
+    unlink(x         = paste0(indic, " ", vIndic),
            recursive = TRUE)
   }
-  create_dir(path = paste0("serverSEEE_", vIndic, "/",
+  create_dir(path = paste0(indic, " ", vIndic, "/",
                            indic, "/Documentation"))
 
   # Copy the server files
-  copy_files(files = paste0(indic, "_", vIndic) %>%
-               paste0(., c("_valid.r", "_valid_fun.RData",
-                           "_calc.r", "_calc_fun.RData")),
-             to    = paste0("serverSEEE_", vIndic, "/", indic))
+  fileList <- list.files(pattern = "_valid.r|_valid_fun.RData|_calc.r|_calc_fun.RData|_model")
+  copy_files(files = fileList,
+             to    = paste0(indic, " ", vIndic, "/", indic))
 
   # Create the archive with the user scripts
-  zip(zipfile = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
+  zip(zipfile = paste0(indic, " ", vIndic, "/", indic, "/Documentation/",
                        indic, "_", vIndic, "_Documentation_scripts.zip"),
       files = c(paste0(indic, "_", vIndic, "_valid_consult.r"),
                 paste0(indic, "_", vIndic, "_calc_consult.r"),
@@ -55,7 +54,7 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
                    inputFiles = inputFiles)
 
   # Create the archive with the import/export files
-  zip(zipfile = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
+  zip(zipfile = paste0(indic, " ", vIndic, "/", indic, "/Documentation/",
                        indic, "_", vIndic, "_Import_export.zip"),
       files = c(inputFiles,
                 list.files(pattern = paste0(indic, "_", vIndic, "_resultats")),
@@ -63,8 +62,9 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
   # Create the exchange file format pdf document
   render(input       = paste0(indic, "_Format_echange.Rmd"),
-         output_file = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
+         output_file = paste0(indic, " ", vIndic, "/", indic, "/Documentation/",
                               indic, "_", vIndic, "_Format_echange.pdf"),
+         output_options = list(latex_engine = "xelatex"),
          encoding = "UTF-8")
 
   # Create the JSON file
