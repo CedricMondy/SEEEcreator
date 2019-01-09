@@ -456,7 +456,7 @@ suppressWarnings(load(paste0(indic, "_", vIndic, "_valid_fun.RData")))
 #> server, user
 # Import du fichier d'entree
 data_entree <- NULL
-data_entree <- read.table(File, header = TRUE, sep = "\t", quote = "",
+data_entree <- read.table(File, header = TRUE, sep = "\t", quote = "\"",
                           stringsAsFactors = FALSE) %>%
   mutate(ID = seq(n()) + 1)
 

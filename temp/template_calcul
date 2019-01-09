@@ -142,7 +142,7 @@ suppressWarnings(load(paste0(indic, "_", vIndic, "_calc_fun.RData")))
 #> server, user
 # Import du fichier d'entree
 data_entree <- read.table(File, header = TRUE, sep = "\t",
-                          stringsAsFactors = FALSE, quote = "",
+                          stringsAsFactors = FALSE, quote = "\"",
                           colClasses = c(CODE_OPERATION = "character",
                                          CODE_STATION   = "character",
                                          CODE_TAXON     = "character"))
@@ -165,6 +165,8 @@ resultats <-
 ## RESULTATS COMPLEMENTAIRES ----
 if (complementaire) {
   data_complementaire <-
+} else {
+  data_complementaire <- NULL
 }
 
 ## SORTIE DES RESULTATS ----

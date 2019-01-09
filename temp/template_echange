@@ -26,6 +26,7 @@ Le fichier d'entrée nécessaire au calcul de l'indicateur `r indic` par SEEE do
 ```{r table1}
 table1 <- read.table(file   = "",
                      sep    = "\t",
+                     quote  = "\"",
                      header = TRUE)
 
 kable(head(table1))                      %>%
@@ -75,7 +76,7 @@ Le fichier de sortie par défaut du calcul de l'indicateur `r indic` par SEEE es
 \hfill\break
 
 ```{r include=FALSE}
-write.table(x = table1, file = "temp_data.txt", sep = "\t")
+write.table(x = table1, file = "temp_data.txt", sep = "\t", row.names = FALSE)
 
 SEEEcreator:::copy_files(from  = paste0(indic, " ", vIndic, "/", indic),
                          files = paste0(indic, "_", vIndic, "_") %>%
