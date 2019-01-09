@@ -1,4 +1,4 @@
-generate_json <- function(indic, vIndic) {
+generate_json <- function(indic, vIndic, exportPath) {
   vIndic2 <- gsub(vIndic, pattern = "v", replacement = "")
   content <- readLines(con = paste0(indic, "_JSON.json"))
 
@@ -40,6 +40,6 @@ generate_json <- function(indic, vIndic) {
          replacement = paste0("\"", "Documentation/", indic, "_", vIndic,
                               "_Import_export.zip", "\""))
 
-  writeLines(content, con = paste0(indic, " ", vIndic, "/", indic, "_", vIndic, ".json"))
+  writeLines(content, con = paste0(exportPath, "/", indic, "_", vIndic, ".json"))
   return(NULL)
 }

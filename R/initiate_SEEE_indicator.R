@@ -69,5 +69,6 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
   # Créer des dossier supplémentaires
   dir.create(path = "Documentation", showWarnings = FALSE)
   dir.create(path = "Tests",         showWarnings = FALSE)
+  dir.create(path = "Exports",       showWarnings = FALSE)
 
 }
