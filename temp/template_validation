@@ -24,7 +24,7 @@
 #> user, server, data
 ## VERSION ----
 indic  <- ""
-vIndic <- "v1.0.0"
+vIndic <- ""
 
 ## CHARGEMENT DES PACKAGES ----
 dependencies <- c("dplyr")
@@ -263,6 +263,36 @@ funIntervalle <- function(Table, mini, maxi, result) {
   funTest(test, result)
 }
 
+# Fonction permettant de tester si les valeurs d'un champ sont plus grandes que
+# celle d'un autre
+funOrdre <- function(Table, lower, upper, result) {
+    tableau = deparse(substitute(Table))
+
+    test <- funDataFrame(Table, tableau)
+
+    if (test$verif == "ok") {
+        testOrder <- function(Table, lower, upper) {
+            mutate_at(.tbl = Table,
+                      .vars = c(lower, upper),
+                      .funs = function(x){
+                          suppressWarnings(as.numeric(x))
+                      }) %>%
+                mutate(.data = ., delta = .[[upper]] - .[[lower]]) %>%
+                filter(delta < 0) %>%
+                (function(df) {pull(df, ID) - 1})
+
+        }
+
+        funTest(test = list("NA" = testOrder(Table,
+                                             lower = lower, upper = upper)) %>%
+                    funCommentaire(test = .,
+                                   message =
+                                       paste0(lower, " plus grand que ", upper),
+                                   Table = Table),
+                result = result)
+    }
+}
+
 # Fonction permettant de tester si les nombres sont entiers
 funEntier <- function(Table, result) {
   tableau <- deparse(substitute(Table))
@@ -432,15 +462,14 @@ funResult <- function(indic, vIndic, heure_debut, valid, sortie, file) {
 #> server, user
 ## INITIALISATION DU TRAITEMENT ----
 
-# Ne pas afficher les messages d'avis ni d'erreur
-options(warn=-1,show.error.messages=FALSE)
+# Ne pas afficher les messages d'avis
+options(warn = -1)
 
-#> server
 # Recuperation du fichier d'entree
+#> server
 arguments <- commandArgs(trailingOnly = TRUE)
 File      <- arguments[1]
 #> user
-# Recuperation du fichier d'entree
 File <- ""
 
 #> user, server

@@ -15,10 +15,11 @@
 #'
 #' @export
 #'
-initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author = ""){
-  indic  <- enc2utf8(indic)
-  type   <- enc2utf8(type)
-  author <- enc2utf8(author)
+initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author = "", version = "1.0.0"){
+  indic   <- enc2utf8(indic)
+  type    <- enc2utf8(type)
+  author  <- enc2utf8(author)
+  version <- enc2utf8(version)
 
   # Génère le fichier json
   json    <- template_json
@@ -26,6 +27,13 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
                   pattern     = "\"\"",
                   replacement = paste0("\"", type, "\""),
                   fixed       = TRUE)
+  json[3] <- gsub(x           = json[3],
+                  pattern     = "\"\"",
+                  replacement = paste0("\"", indic, "\""),
+                  fixed       = TRUE)
+  json[4] <- gsub(x           = json[4],
+                  pattern     = "\"\"",
+                  replacement = paste0("\"", version, "\""))
 
   # Génère le fichier de validation
   validation     <- template_validation
@@ -34,8 +42,6 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
   validation[3]  <- gsub(x = validation[3], pattern = ":",
                          replacement = paste0(": ", author))
   validation[11] <- paste(validation[11], format(Sys.Date(), "%Y"), author)
-  validation[26] <- gsub(x = validation[26], pattern = "\"\"",
-                         replacement = paste0("\"", indic, "\""))
 
   # Génère le fichier de calcul
   calcul     <- template_calcul
@@ -44,15 +50,17 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
   calcul[3]  <- gsub(x = calcul[3], pattern = ":",
                      replacement = paste0(": ", author))
   calcul[11] <- paste(calcul[11], format(Sys.Date(), "%Y"), author)
-  calcul[26] <- gsub(x = calcul[26], pattern = "\"\"",
-                     replacement = paste0("\"", indic, "\""))
 
   # Génère le fichier de format d'échange
-  echange     <- template_echange
-  echange[13] <- gsub(x = echange[13], pattern = "\"\"",
-                      replacement = paste0("\"", indic, "\""))
+  echange    <- template_echange
+
+  # Génère le CHANGELOG
+  changelog  <- template_changelog
 
   # Exporte les fichiers
+  writeLines(text     = changelog,
+             con      = paste0(indic, "_CHANGELOG.txt"),
+             useBytes = TRUE)
   writeLines(text     = json,
              con      = paste0(indic, "_JSON.json"),
              useBytes = TRUE)

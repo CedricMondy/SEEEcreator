@@ -30,7 +30,7 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
   generate_scripts(source = paste0(indic, "_Calcul.r"),     version = vIndic, test = test)
 
   # Create the folder structure
-  exportPath <- paste0("Exports/", indic, " ", vIndic)
+  exportPath <- paste0("Exports/", indic, " v", vIndic)
 
   if (dir.exists(exportPath)) {
     unlink(x         = exportPath,
@@ -46,26 +46,30 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
   # Create the archive with the user scripts
   zip(zipfile = paste0(exportPath, "/", indic, "/Documentation/",
-                       indic, "_", vIndic, "_Documentation_scripts.zip"),
-      files = c(paste0(indic, "_", vIndic, "_valid_consult.r"),
-                paste0(indic, "_", vIndic, "_calc_consult.r"),
+                       indic, "_v", vIndic, "_Documentation_scripts.zip"),
+      files = c(paste0(indic, "_CHANGELOG.txt"),
+                paste0(indic, "_v", vIndic, "_valid_consult.r"),
+                paste0(indic, "_v", vIndic, "_calc_consult.r"),
                 paramFiles))
 
   # Generate the results corresponding to the input files
-  generate_results(calc       = paste0(indic, "_", vIndic, "_calc.r"),
+  generate_results(calc       = paste0(indic, "_v", vIndic, "_calc.r"),
                    inputFiles = inputFiles)
 
   # Create the archive with the import/export files
   zip(zipfile = paste0(exportPath, "/", indic, "/Documentation/",
-                       indic, "_", vIndic, "_Import_export.zip"),
+                       indic, "_v", vIndic, "_Import_export.zip"),
       files = c(inputFiles,
-                list.files(pattern = paste0(indic, "_", vIndic, "_resultats")),
+                list.files(pattern = paste0(indic, "_v", vIndic, "_resultats")),
                 list.files(pattern = paste0(indic, "_supplement"))))
 
   # Create the exchange file format pdf document
-  render(input       = paste0(indic, "_Format_echange.Rmd"),
+  generate_exchange(source = paste0(indic, "_Format_echange.Rmd"),
+                    version = vIndic)
+
+  render(input       = paste0(indic, "_Format_echange_temp.Rmd"),
          output_file = paste0(exportPath, "/", indic, "/Documentation/",
-                              indic, "_", vIndic, "_Format_echange.pdf"),
+                              indic, "_v", vIndic, "_Format_echange.pdf"),
          output_options = list(latex_engine = "xelatex"),
          encoding = "UTF-8")
 
@@ -73,5 +77,5 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
   generate_json(indic = indic, vIndic = vIndic, exportPath = exportPath)
 
   # Clean up the directory
-  file.remove(list.files(pattern = "_valid|_calc|_resultats"))
+  file.remove(list.files(pattern = "_valid|_calc|_resultats|Format_echange_temp|radarPlots"))
 }

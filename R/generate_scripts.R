@@ -28,8 +28,7 @@ generate_scripts <- function(source,
   ## Index version
   vLoc <- which(grepl("# Version", source_content))
   source_content[vLoc] <- gsub(pattern = ":",
-                               replacement = paste0(": ",
-                                                    gsub("v", "", version)),
+                               replacement = paste0(": ", version),
                                x = source_content[vLoc])
   ## R version used
   RLoc <- which(grepl("# Interpreteur", source_content))
@@ -51,6 +50,21 @@ generate_scripts <- function(source,
                                                             collapse = ", ")
                                                       ),
                                  x = source_content[depLoc])
+
+  # Automatic filling of indicator and version
+  indic <- gsub(x = source, pattern ="_Validation.r", replacement = "") %>%
+    gsub(x = ., pattern = "_Calcul.r", replacement = "")
+
+  indicLoc <- which(grepl("indic  <- ", source_content))
+  source_content[indicLoc] <- gsub(pattern = "<-.+$",
+                                   replacement = paste0("<- \"", indic, "\""),
+                                   x = source_content[indicLoc])
+
+  vLoc <- which(grepl("vIndic <-", source_content))
+  source_content[vLoc] <- gsub(pattern     = "<-.+$",
+                               replacement = paste0("<- \"v", version, "\""),
+                               x = source_content[vLoc])
+
 
   # Separate the user, server and data sections
   element_location <- 1:length(source_content)
@@ -77,12 +91,10 @@ generate_scripts <- function(source,
       ## Related files
       if (any(grepl("data", source_content[section_location]))) {
         dataFiles <- gsub(pattern = "Calcul.r|Calcul.R",
-                          replacement = paste0(version,
-                                               "_calc_fun.RData"),
+                          replacement = paste0("v", version, "_calc_fun.RData"),
                           x = source) %>%
           gsub(pattern = "Validation.r|Validation.R",
-               replacement = paste0(version,
-                                    "_valid_fun.RData")
+               replacement = paste0("v", version, "_valid_fun.RData")
           )
       }
 
@@ -96,11 +108,11 @@ generate_scripts <- function(source,
 
       output <- gsub(x           = source,
                      pattern     = "Calcul",
-                     replacement = paste0(version, "_calc"),
+                     replacement = paste0("v", version, "_calc"),
                      fixed       = TRUE) %>%
         gsub(x           = .,
              pattern     = "Validation",
-             replacement = paste0(version, "_valid"),
+             replacement = paste0("v", version, "_valid"),
              fixed       = TRUE)
 
       writeLines(text = document_content, con = output)
@@ -119,11 +131,11 @@ generate_scripts <- function(source,
 
       output <- gsub(x           = source,
                      pattern     = "Calcul",
-                     replacement = paste0(version, "_calc_consult"),
+                     replacement = paste0("v", version, "_calc_consult"),
                      fixed       = TRUE) %>%
         gsub(x           = .,
              pattern     = "Validation",
-             replacement = paste0(version, "_valid_consult"),
+             replacement = paste0("v", version, "_valid_consult"),
              fixed       = TRUE)
 
       writeLines(text = document_content, con = output)
@@ -132,11 +144,11 @@ generate_scripts <- function(source,
     if (d %in% "data") {
       output <- gsub(x           = source,
                      pattern     = "Calcul.r",
-                     replacement = paste0(version, "_calc_fun.RData"),
+                     replacement = paste0("v", version, "_calc_fun.RData"),
                      fixed       = TRUE) %>%
         gsub(x           = .,
              pattern     = "Validation.r",
-             replacement = paste0(version, "_valid_fun.RData"),
+             replacement = paste0("v", version, "_valid_fun.RData"),
              fixed       = TRUE)
 
       temp_output <- tempfile(fileext = ".R")

@@ -5,7 +5,7 @@
 \title{Initiate a SEEE indicator}
 \usage{
 initiate_SEEE_indicator(indic, type = "Outil d'évaluation",
-  author = "")
+  author = "", version = "1.0.0")
 }
 \arguments{
 \item{indic}{string. The name of the indicator as it it will be used in

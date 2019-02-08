@@ -24,7 +24,7 @@
 #> user, server, data
 ## VERSION ----
 indic  <- ""
-vIndic <- "v1.0.0"
+vIndic <- ""
 
 ## CHARGEMENT DES PACKAGES ----
 dependencies <- c("dplyr")
@@ -118,17 +118,17 @@ funResult 		<- function(indic, vIndic, heure_debut,
 
 #> server, user
 ## INITIALISATION DU TRAITEMENT ----
-# Ne pas afficher les messages d'avis ni d'erreur
-options(warn = -1, show.error.messages = FALSE)
+# Ne pas afficher les messages d'avis
+options(warn = -1)
 
-#> server
 # Recuperation du fichier d'entree
+#> server
 arguments      <- commandArgs(trailingOnly = TRUE)
 File           <- arguments[1]
 complementaire <- as.logical(arguments[2])
 #> user
 File           <- ""
-complementaire <- TRUE
+complementaire <- FALSE
 
 #> server, user
 # Initialisation de l'heure
@@ -164,7 +164,7 @@ resultats <-
 
 ## RESULTATS COMPLEMENTAIRES ----
 if (complementaire) {
-  data_complementaire <-
+  data_complementaire <- NULL
 } else {
   data_complementaire <- NULL
 }
