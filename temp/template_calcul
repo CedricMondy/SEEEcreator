@@ -184,7 +184,7 @@ fichierResultatComplementaire <- paste0(indic, "_", vIndic,
 fichierResultat               <- ""
 fichierResultatComplementaire <- ""
 
-#user, server
+#> user, server
 funResult(indic               = indic,
           vIndic              = vIndic,
           heure_debut         = heure_debut,
