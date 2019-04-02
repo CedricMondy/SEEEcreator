@@ -5,7 +5,7 @@ output: pdf_document
 classoption: landscape
 ---
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 library(knitr)
 library(kableExtra)
 library(dplyr, warn.conflicts = FALSE)
