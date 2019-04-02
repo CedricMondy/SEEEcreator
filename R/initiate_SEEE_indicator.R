@@ -55,12 +55,14 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
   echange    <- template_echange
 
   # Génère le CHANGELOG
-  changelog  <- template_changelog
+  changelog    <- template_changelog
+  changelog[1] <- paste0(changelog[1], " ", indic)
+  changelog[3] <- paste0(changelog[3], " ", version)
 
   # Exporte les fichiers
   writeLines(text     = changelog,
              con      = paste0(indic, "_CHANGELOG.txt"),
-             useBytes = TRUE)
+             useBytes = FALSE)
   writeLines(text     = json,
              con      = paste0(indic, "_JSON.json"),
              useBytes = TRUE)
