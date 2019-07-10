@@ -5,63 +5,77 @@
 #'
 #' @param indic the name of the indicator as it is in the names of the
 #'   development files (ending with _valid.r and _calc.r)
-#' @param paramFiles a character vector with the names of the tables and data
-#'   that are not user-supplied but necessary for the indicator to be calculated
-#'   (e.g. indicator value tables)
-#' @param inputFiles a character vector with the names of the files used to
-#'   provide exemples in the import_export documentation
+#'
+#' @param additionalInput values of additional inputs (not files, e.g. TRUE/FALSE)
+#'
+#' @param test logical should the warnings be printed (useful when testing)
 #'
 #' @importFrom dplyr "%>%"
 #' @importFrom utils zip
+#' @importFrom rmarkdown render
 #' @export
-create_SEEE_export <- function(indic, paramFiles, inputFiles) {
+create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
   # Get the indicator version
   vIndic <- extract_version(indic)
 
+  # Get the parameter files
+  paramFiles <- list.files(pattern = paste0(indic, "_params"))
+
+  # Get the input files
+  inputFiles <- c(list.files(pattern = paste0(indic, "_entree")), additionalInput)
+
   # Generate user and server files
-  generate_scripts(source = paste0(indic, "_Validation.r"), version = vIndic)
-  generate_scripts(source = paste0(indic, "_Calcul.r"),     version = vIndic)
+  generate_scripts(source = paste0(indic, "_Validation.r"), version = vIndic, test = test)
+  generate_scripts(source = paste0(indic, "_Calcul.r"),     version = vIndic, test = test)
 
   # Create the folder structure
-  if (dir.exists(paste0("serverSEEE_", vIndic))) {
-    unlink(x         = paste0("serverSEEE_", vIndic),
+  exportPath <- paste0("Exports/", indic, " v", vIndic)
+
+  if (dir.exists(exportPath)) {
+    unlink(x         = exportPath,
            recursive = TRUE)
   }
-  create_dir(path = paste0("serverSEEE_", vIndic, "/",
+  create_dir(path = paste0(exportPath, "/",
                            indic, "/Documentation"))
 
-  # Copy the JSON file
-  copy_files(files = paste0(indic, "_", vIndic, ".json"),
-             to    = paste0("serverSEEE_", vIndic))
-
-
   # Copy the server files
-  copy_files(files = paste0(indic, "_", vIndic) %>%
-               paste0(., c("_valid.r", "_valid_fun.RData",
-                           "_calc.r", "_calc_fun.RData")),
-             to    = paste0("serverSEEE_", vIndic, "/", indic))
+  fileList <- list.files(pattern = "_valid.r|_valid_fun.RData|_calc.r|_calc_fun.RData|_model")
+  copy_files(files = fileList,
+             to    = paste0(exportPath, "/", indic))
 
   # Create the archive with the user scripts
-  zip(zipfile = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
-                       indic, "_", vIndic, "_Documentation_scripts.zip"),
-      files = c(paste0(indic, "_", vIndic, "_valid_consult.r"),
-                paste0(indic, "_", vIndic, "_calc_consult.r"),
+  zip(zipfile = paste0(exportPath, "/", indic, "/Documentation/",
+                       indic, "_v", vIndic, "_Documentation_scripts.zip"),
+      files = c(paste0(indic, "_CHANGELOG.txt"),
+                paste0(indic, "_v", vIndic, "_valid_consult.r"),
+                paste0(indic, "_v", vIndic, "_calc_consult.r"),
                 paramFiles))
 
   # Generate the results corresponding to the input files
-  generate_results(calc       = paste0(indic, "_", vIndic, "_calc.r"),
+  generate_results(calc       = paste0(indic, "_v", vIndic, "_calc.r"),
                    inputFiles = inputFiles)
 
   # Create the archive with the import/export files
-  zip(zipfile = paste0("serverSEEE_", vIndic, "/", indic, "/Documentation/",
-                       indic, "_", vIndic, "_Import_export.zip"),
+  zip(zipfile = paste0(exportPath, "/", indic, "/Documentation/",
+                       indic, "_v", vIndic, "_Import_export.zip"),
       files = c(inputFiles,
-                paste0(indic, "_", vIndic, "_resultats.csv")))
+                list.files(pattern = paste0(indic, "_v", vIndic, "_resultats")),
+                list.files(pattern = paste0(indic, "_supplement"))))
+
+  # Create the exchange file format pdf document
+  generate_exchange(source = paste0(indic, "_Format_echange.Rmd"),
+                    version = vIndic)
+
+  render(input       = paste0(indic, "_Format_echange_temp.Rmd"),
+         output_file = paste0(exportPath, "/", indic, "/Documentation/",
+                              indic, "_v", vIndic, "_Format_echange.pdf"),
+         output_options = list(latex_engine = "xelatex"),
+         encoding = "UTF-8")
+
+  # Create the JSON file
+  generate_json(indic = indic, vIndic = vIndic, exportPath = exportPath)
 
   # Clean up the directory
-  file.remove(paste0(indic, "_", vIndic) %>%
-                paste0(., c("_valid.r", "_valid_fun.RData", "_valid_consult.r",
-                            "_calc.r", "_calc_fun.RData", "_calc_consult.r",
-                            "_resultats.csv")))
+  file.remove(list.files(pattern = "_valid|_calc|_resultats|Format_echange_temp|radarPlots"))
 }

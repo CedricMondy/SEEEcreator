@@ -1,0 +1,179 @@
+---
+header-includes:
+   - \usepackage{fourier}
+output: pdf_document
+classoption: landscape
+---
+
+```{r, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(dplyr, warn.conflicts = FALSE)
+
+indic  <- ""
+vIndic <- ""
+
+options(knitr.table.format = "latex")
+opts_chunk$set(echo = FALSE)
+```
+
+
+# I. Entrée `r paste(indic, vIndic)`
+
+Le fichier d'entrée nécessaire au calcul de l'indicateur `r indic` par SEEE doit être au format texte séparé par des tabulations et construit comme cet exemple:
+\hfill\break
+
+```{r table1}
+table1 <- read.table(file   = "",
+                     sep    = "\t",
+                     quote  = "\"",
+                     header = TRUE)
+
+kable(head(table1))                      %>%
+  kable_styling(position      = "left")  %>%
+  column_spec(1, border_left  = TRUE)    %>%
+  column_spec(ncol(table1), border_right = TRUE)
+```
+
+\hfill\break
+Il doit, à minima, comporter ces `r ncol(table1)` champs complétés comme suit:
+\hfill\break
+
+```{r table2}
+table2 <- rbind(c("Nom de l'entête", "Descriptif du champ"),
+                c("CODE_OPERATION ",
+                  "Code de l'opération de contrôle désignée. Le champ est obligatoire et de type alphanumérique."),
+                c("CODE_STATION",
+                  "Code de la station associée à l'opération. Le champ est facultatif."),
+                c("DATE",
+                  "Date à laquelle l'opération a été effectuée. Le champ est facultatif."),
+                c("CODE_TAXON",
+                  "Code sandre du taxon identifié. Le champ est obligatoire et de type entier numérique positif."),
+                c("RESULTAT",
+                  "Effectif ou présence du taxon identifié. Le champ est obligatoire et de type entier numérique positif."))
+
+kable(table2, align = NULL)                           %>%
+  kable_styling(position = "left")                    %>%
+  column_spec(1, width = "4cm",  border_left  = TRUE) %>%
+  column_spec(ncol(table2), width = "16cm", border_right = TRUE)
+```
+
+
+NB: L'ordre des colonnes n'a pas d'importance.
+    Les champs facultatifs peuvent rester vides ou être complétés par un type de données quelconque.
+
+\danger Peu importe que le champ soit obligatoire ou facultatif, le nom des `r ncol(table1)` entêtes doit être respecté.
+
+\danger Ne pas introduire d'espace dans les cellules des champs obligatoires (hors code opération).
+
+\pagebreak
+
+# II. Sortie `r paste(indic, vIndic)`
+
+## II.1 Sortie par défaut
+
+Le fichier de sortie par défaut du calcul de l'indicateur `r indic` par SEEE est construit comme cet exemple:
+\hfill\break
+
+```{r include=FALSE}
+write.table(x = table1, file = "temp_data.txt", sep = "\t", row.names = FALSE)
+
+SEEEcreator:::copy_files(from  = paste0(indic, " ", vIndic, "/", indic),
+                         files = paste0(indic, "_", vIndic, "_") %>%
+                           paste0(., c("calc.r", "calc_fun.RData")))
+
+SEEEcreator:::generate_results(calc = paste0(indic, "_", vIndic, "_calc.r"),
+                               inputFiles = c("temp_data.txt", TRUE))
+
+label  <- readLines(paste0(indic, "_", vIndic, "_resultats.csv"))[[1]] %>%
+  strsplit(split = ";")                                                %>%
+  '[['(1)
+results <- read.csv2(paste0(indic, "_", vIndic, "_resultats.csv"), skip = 1, header = FALSE)
+table3 <- rbind(matrix(c(label,
+                         rep("", (ncol(results) - length(label)))),
+                       nrow = 1),
+                results) %>%
+  (function(mat) {
+    colnames(mat) <- as.vector(t(mat[1,]))
+    mat <- mat[-1,]
+    rownames(mat) <- NULL
+    mat
+  })
+
+file.remove("temp_data.txt")
+```
+
+```{r table3}
+kable(table3)                     %>%
+  kable_styling(position = "left") %>%
+  column_spec(1, width = "3.25cm", border_left = TRUE) %>%
+  column_spec(ncol(table3), width = "3.75cm", border_right = TRUE)
+```
+
+\hfill\break
+Il comporte les `r ncol(table3)` champs suivants complétés comme suit:
+\hfill\break
+
+```{r table4}
+table4 <- rbind(c("Nom de l'entête", "Descriptif du champ"),
+                c("CODE_OPERATION", "Code de l'opération de contrôle renseigné. Ce champ est repris du fichier d'entrée."),
+                c("CODE_STATION", "Code de la station associée à l'opération. Ce champ est repris du fichier d'entrée."),
+                c("DATE", "Date à laquelle l'opération a été effectuée. Ce champ est repris du fichier d'entrée."),
+                c("CODE_PAR", "Code sandre du paramètre de sortie."),
+                c("LIB_PAR", "Libellé du paramètre de sortie."),
+                c("RESULTAT", "Valeur du paramètre de sortie en EQR."),
+                c("COMMENTAIRES", "Information sur les taxons non contributifs (liste taxonomique et proportion du prélèvement)."))
+
+knitr::kable(table4)                                  %>%
+  kable_styling(position = "left")                    %>%
+  column_spec(1, width = "4cm",  border_left  = TRUE) %>%
+  column_spec(ncol(table4), width = "16cm", border_right = TRUE)
+```
+\hfill\break
+
+## II.2 Sortie optionnelle
+```{r}
+label  <- readLines(paste0(indic, "_", vIndic, "_resultats_complementaires.csv"))[[1]] %>%
+  strsplit(split = ";") %>%
+  '[['(1)
+results <- read.csv2(paste0(indic, "_", vIndic, "_resultats_complementaires.csv"), skip = 1, header = FALSE)
+table5 <- rbind(matrix(c(label,
+                         rep("", (ncol(results) - length(label)))),
+                       nrow = 1),
+                results) %>%
+  (function(mat) {
+    colnames(mat) <- as.vector(t(mat[1,]))
+    mat <- mat[-1,]
+    rownames(mat) <- NULL
+    mat
+  })
+
+```
+
+Le fichier de sortie optionnel du calcul de l'indicateur `r indic` par SEEE est construit de la manière suivante:
+
+```{r table5}
+kable(table5)                     %>%
+  kable_styling(position = "left") %>%
+  column_spec(1, border_left = TRUE) %>%
+  column_spec(ncol(table5), border_right = TRUE)
+
+```
+
+
+\hfill\break
+Il comporte les `r ncol(table5)` champs suivants complétés comme suit:
+\hfill\break
+
+```{r table6}
+table6 <- rbind(c("Nom de l'entête", "Descriptif du champ"))
+
+knitr::kable(table6)                                  %>%
+  kable_styling(position = "left")                    %>%
+  column_spec(1, width = "4cm",  border_left  = TRUE) %>%
+  column_spec(ncol(table4), width = "16cm", border_right = TRUE)
+```
+
+\hfill\break
+
+Pour chacune des sorties (par défaut et optionnelle), la première ligne du tableau de sortie comporte les informations suivantes: indicateur, version, date d'exécution du calcul, temps d'éxécution du calcul. Le tableau de résultats suit dessous.
