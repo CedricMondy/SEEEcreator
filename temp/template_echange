@@ -1,5 +1,6 @@
 ---
 header-includes:
+   - \usepackage{amssymb}
    - \usepackage{fourier}
 output: pdf_document
 classoption: landscape
