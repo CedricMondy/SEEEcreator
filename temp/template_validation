@@ -142,6 +142,31 @@ funColonnes <- function(Table, cols, result) {
   funTest(test, result)
 }
 
+# Fonction permettant de tester l'unicite des codes operations
+funOperations <- function(Table, result) {
+  # recupere le nom de l'objet passe a l'argument Table
+  tableau <- deparse(substitute(Table))
+
+  test <- funDataFrame(Table, tableau)
+
+  if (test$verif == "ok") {
+
+    test <- nrow(select(Table, CODE_STATION, DATE, CODE_OPERATION) %>%
+                   distinct()) == n_distinct(Table$CODE_OPERATION)
+
+    if (!test) {
+      test <- list(verif = "ko",
+                   sortie = tibble(colonne = NA, ligne = NA,
+                                   message = "Les CODE_OPERATIONS doivent etre des combinaisons uniques de CODE_STATION et DATE"))
+    } else {
+      test <- list(verif  = "ok",
+                   sortie = initResult())
+    }
+  }
+
+  funTest(test, result)
+}
+
 # Fonction retournant un commentaire pour un test donné
 funCommentaire <- function(test, message, Table) {
   test <- test[sapply(test, length) > 0]
@@ -500,7 +525,11 @@ resultat <- initResult() %>%
     Table  = data_entree,
     cols   = c("CODE_OPERATION","CODE_STATION",
                "DATE", "CODE_TAXON", "RESULTAT"),
-    result = .)
+    result = .)          %>%
+  funOperations(
+    Table = data_entree,
+    result = .
+  )
 
 if (resultat$verif == "ok") {
   resultat <- resultat %>%
