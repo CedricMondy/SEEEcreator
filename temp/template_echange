@@ -1,6 +1,4 @@
 ---
-header-includes:
-   - \usepackage{fourier}
 output: pdf_document
 classoption: landscape
 ---
@@ -62,9 +60,9 @@ kable(table2, align = NULL)                           %>%
 NB: L'ordre des colonnes n'a pas d'importance.
     Les champs facultatifs peuvent rester vides ou être complétés par un type de données quelconque.
 
-\danger Peu importe que le champ soit obligatoire ou facultatif, le nom des `r ncol(table1)` entêtes doit être respecté.
+**! Peu importe que le champ soit obligatoire ou facultatif, le nom des `r ncol(table1)` entêtes doit être respecté.**
 
-\danger Ne pas introduire d'espace dans les cellules des champs obligatoires (hors code opération).
+**! Ne pas introduire d'espace dans les cellules des champs obligatoires (hors code opération).**
 
 \pagebreak
 
