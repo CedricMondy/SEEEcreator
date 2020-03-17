@@ -86,9 +86,17 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
 
   # Set up renv if required
   if (set_renv) {
-    pckg_list <- paste(paste0(package_version$Package, "@",
-                              package_version$Version),
-                       collapse = ", ")
+    # May be problems to install some packages from sources
+    pckg_issues <- c("XML", "ranger")
+    package_version$Version[package_version$Package %in% pckg_issues] <- ""
+
+    pckg_list <- c(paste0(package_version$Package,
+                        ifelse(package_version$Package  %in% pckg_issues,
+                        "", "@"),
+                        package_version$Version),
+                   "CedricMondy/SEEEcreator")
+
+    cat("First installation can be long, be patient...")
 
     init(bare = TRUE)
     install(packages = pckg_list,
@@ -96,5 +104,7 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
             rebuild = TRUE,
             confirm = TRUE,
             project = NULL)
+
+    print(package_version)
   }
 }
