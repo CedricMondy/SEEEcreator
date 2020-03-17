@@ -4,24 +4,27 @@
 #' SEEE indicator. Basic information about indicator name, type and authors are
 #' added to the files.
 #'
-#' @param indic string. The name of the indicator as it it will be used in
-#'   SEEE
-#' @param type string. The type of indicator (e.g. Outil d'évaluation, Outil
-#'   de diagnostic, beta-test)
+#' @param indic string. The name of the indicator
+#' @param type string. The type of indicator (e.g. Outil d'évaluation, Outil de
+#'   diagnostic, beta-test)
 #' @param author string. The names of the indicator authors
+#' @param version
+#' @param set_renv boolean. If TRUE, will set renv up installing the packages
+#'   available on the SEEE server with the same version.
 #'
 #' @return nothing. Writes in the current directory the template files necessary
 #'   to develop a SEEE indicator
 #'
+#' @importFrom renv init install
 #' @export
 #'
-initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author = "", version = "1.0.0"){
+initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author = "", version = "1.0.0", set_renv = FALSE){
   indic   <- enc2utf8(indic)
   type    <- enc2utf8(type)
   author  <- enc2utf8(author)
   version <- enc2utf8(version)
 
-  # Génère le fichier json
+  # Create JSON config file
   json    <- template_json
   json[2] <- gsub(x           = json[2],
                   pattern     = "\"\"",
@@ -35,7 +38,7 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
                   pattern     = "\"\"",
                   replacement = paste0("\"", version, "\""))
 
-  # Génère le fichier de validation
+  # Create input validation script
   validation     <- template_validation
   validation[2]  <- gsub(x = validation[2], pattern = ":",
                          replacement = paste0(": ", indic))
@@ -43,7 +46,7 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
                          replacement = paste0(": ", author))
   validation[11] <- paste(validation[11], format(Sys.Date(), "%Y"), author)
 
-  # Génère le fichier de calcul
+  # Create calculation script
   calcul     <- template_calcul
   calcul[2]  <- gsub(x = calcul[2], pattern = ":",
                      replacement = paste0(": ", indic))
@@ -51,15 +54,15 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
                      replacement = paste0(": ", author))
   calcul[11] <- paste(calcul[11], format(Sys.Date(), "%Y"), author)
 
-  # Génère le fichier de format d'échange
+  # Create exchange format file
   echange    <- template_echange
 
-  # Génère le CHANGELOG
+  # Create CHANGELOG file
   changelog    <- template_changelog
   changelog[1] <- paste0(changelog[1], " ", indic)
   changelog[3] <- paste0(changelog[3], " ", version)
 
-  # Exporte les fichiers
+  # Write files
   writeLines(text     = changelog,
              con      = paste0(indic, "_CHANGELOG.txt"),
              useBytes = FALSE)
@@ -76,9 +79,22 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
              con      = paste0(indic, "_Format_echange.Rmd"),
              useBytes = TRUE)
 
-  # Créer des dossier supplémentaires
+  # Create additional folders
   dir.create(path = "Documentation", showWarnings = FALSE)
   dir.create(path = "Tests",         showWarnings = FALSE)
   dir.create(path = "Exports",       showWarnings = FALSE)
 
+  # Set up renv if required
+  if (set_renv) {
+    pckg_list <- paste(paste0(package_version$Package, "@",
+                              package_version$Version),
+                       collapse = ", ")
+
+    init(bare = TRUE)
+    install(packages = pckg_list,
+            library = NULL,
+            rebuild = TRUE,
+            confirm = TRUE,
+            project = NULL)
+  }
 }

@@ -1,12 +1,12 @@
 #' Create a SEEE export
 #'
-#' Create the folder and files necessary to upload to the SEEE server in order
-#' to implement a new indicator
+#' Create the folder structure and files necessary to upload to the SEEE server
+#' in order to implement a new indicator
 #'
-#' @param indic the name of the indicator as it is in the names of the
-#'   development files (ending with _valid.r and _calc.r)
+#' @param indic the name of the indicator
 #'
-#' @param additionalInput values of additional inputs (not files, e.g. TRUE/FALSE)
+#' @param additionalInput values of additional inputs (not files, e.g.
+#'   TRUE/FALSE for additional output)
 #'
 #' @param test logical should the warnings be printed (useful when testing)
 #'
@@ -36,8 +36,7 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
     unlink(x         = exportPath,
            recursive = TRUE)
   }
-  create_dir(path = paste0(exportPath, "/",
-                           indic, "/Documentation"))
+  create_dir(path = paste0(exportPath, "/", indic, "/Documentation"))
 
   # Copy the server files
   fileList <- list.files(pattern = "_valid.r|_valid_fun.RData|_calc.r|_calc_fun.RData|_model")
