@@ -1,16 +1,15 @@
 Package: SEEEcreator
 Type: Package
-Title: Create an export for the SEEE server
+Title: Develop indicators for the French water body evaluation system (SEEE)
 Version: 0.1.5
 Author: Cedric Mondy
-Maintainer: Cedric Mondy <cedric.mondy@afbiodiversite.fr>
-Description: This package creates the export files necessary to upload a new version of
-    an indicator to the SEEE server.
+Maintainer: Cedric Mondy <cedric.mondy@ofb.gouv.fr>
+Description: This package creates the export files necessary to upload a new version of an indicator to the SEEE server.
 Imports:
-    dplyr (>= 0.8.5),
-    rmarkdown (>= 2.1),
-    tinytex (>= 0.20),
-    renv (>= 0.9.3)
+    dplyr,
+    rmarkdown,
+    tinytex,
+    renv
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
