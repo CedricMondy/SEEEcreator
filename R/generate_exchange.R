@@ -1,5 +1,6 @@
 generate_exchange <- function(source, version) {
-  source_content <- readLines(con = source, skipNul = FALSE)
+  source_content <- readLines(con = source, skipNul = FALSE) %>%
+    gsub(x = ., pattern = "##==<.*>==##", replacement = "")
 
   indic <- gsub(x = source, pattern = "_Format_echange.Rmd", replacement = "")
 

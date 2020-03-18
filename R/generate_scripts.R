@@ -4,7 +4,9 @@ generate_scripts <- function(source,
                              version,
                              test = FALSE) {
 
-  source_content <- readLines(con = source, skipNul = FALSE)
+  # Remove placeholders
+  source_content <- readLines(con = source, skipNul = FALSE) %>%
+    gsub(x = ., pattern = "##==<.*>==##", replacement = "")
 
   section_location <- which(grepl("#>", source_content))
 

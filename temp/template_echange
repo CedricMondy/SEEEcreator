@@ -17,12 +17,12 @@ opts_chunk$set(echo = FALSE)
 
 
 # I. Entrée `r paste(indic, vIndic)`
-
+##==< AJOUTER SI NESCESSAIRE DES TITRES DE NIVEAUX 2 POUR DIFFERENTS FICHIERS D'ENTREE >==##
 Le fichier d'entrée nécessaire au calcul de l'indicateur `r indic` par SEEE doit être au format texte séparé par des tabulations et construit comme cet exemple:
 \hfill\break
 
 ```{r table1}
-table1 <- read.table(file   = "",
+table1 <- read.table(file   = "", ##==< AJOUTER LE FICHIER D'ENTREE >==##
                      sep    = "\t",
                      quote  = "\"",
                      header = TRUE)
@@ -37,6 +37,7 @@ kable(head(table1))                      %>%
 Il doit, à minima, comporter ces `r ncol(table1)` champs complétés comme suit:
 \hfill\break
 
+##==< MODIFIER LES NOMS DE CHAMPS ET DESCRIPTIFS EN FONCTION DES FICHIERS D'ENTREE >==##
 ```{r table2}
 table2 <- rbind(c("Nom de l'entête", "Descriptif du champ"),
                 c("CODE_OPERATION ",
@@ -56,7 +57,6 @@ kable(table2, align = NULL)                           %>%
   column_spec(ncol(table2), width = "16cm", border_right = TRUE)
 ```
 
-
 NB: L'ordre des colonnes n'a pas d'importance.
     Les champs facultatifs peuvent rester vides ou être complétés par un type de données quelconque.
 
@@ -68,6 +68,7 @@ NB: L'ordre des colonnes n'a pas d'importance.
 
 # II. Sortie `r paste(indic, vIndic)`
 
+##==< SI PAS DE SORTIE COMPLEMENTAIRE SUPPRIMER LA PARTIE CORRESPONDANTE ET LES TITRES DE NIVEAU 2 >==##
 ## II.1 Sortie par défaut
 
 Le fichier de sortie par défaut du calcul de l'indicateur `r indic` par SEEE est construit comme cet exemple:
@@ -112,6 +113,7 @@ kable(table3)                     %>%
 Il comporte les `r ncol(table3)` champs suivants complétés comme suit:
 \hfill\break
 
+##==< A AJUSTER SI BESOIN >==##
 ```{r table4}
 table4 <- rbind(c("Nom de l'entête", "Descriptif du champ"),
                 c("CODE_OPERATION", "Code de l'opération de contrôle renseigné. Ce champ est repris du fichier d'entrée."),

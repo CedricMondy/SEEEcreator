@@ -491,6 +491,7 @@ funResult <- function(indic, vIndic, heure_debut, valid, sortie, file) {
 options(warn = -1)
 
 # Recuperation du fichier d'entree
+##==< SI PLUSIEURS FICHIERS D'ENTREE AJOUTER LES DANS LES DEUX PARTIES (server et user) >==##
 #> server
 arguments <- commandArgs(trailingOnly = TRUE)
 File      <- arguments[1]
@@ -515,7 +516,7 @@ data_entree <- read.table(File, header = TRUE, sep = "\t", quote = "\"",
   mutate(ID = seq(n()) + 1)
 
 ## VALIDATION DES DONNEES ----
-
+##==< MODIFIER/AJOUTER LES TESTS NECESSAIRES ICI >==##
 resultat <- initResult() %>%
   funImport(
     Table  = data_entree,
@@ -543,10 +544,13 @@ if (resultat$verif == "ok") {
       result   = .)
 }
 
+##==< SI PLUSIEURS FICHIERS D'ENTREE INCLURE EGALEMENT LES TESTS CORRESPONDANT >==##
 # Parametre de succes/echec de la validation
+##==< SI PLUSIEURS FICHIERS D'ENTREE METTRE DANS LA LISTE LES RESULTATS DE TESTS CORRESPONDANT >==##
 valid <- funValid(resultats = list(resultat))
 
 # SORTIE DU RAPPORT D'ERREUR ----
+##==< SI PLUSIEURS FICHIERS D'ENTREE METTRE DANS LA LISTE LA FONCTION funSortie() POUR LES RESULTATS DE TESTS CORRESPONDANT >==##
 sortie <- list(faunistiques     = funSortie(resultat))
 
 #> user

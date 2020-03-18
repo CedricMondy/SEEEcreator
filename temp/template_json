@@ -8,20 +8,20 @@
  "entree"		: 	{
 					"fichier_entree" : 	{
 										"type" 	: "file",
-										"label" : ""
+										"label" : "##==< METTRE LE TYPE DE DONNEES ICI >==##"
 										}
 					},
  "sortie"       : {
                   "complementaire" : {
                             "type" : "checkbox",
-                            "label" : ""
+                            "label" : "##==< SI RESULTATS COMPLEMENTAIRES METTRE LE TYPE ICI, SINON SUPPRIMER TOUTE LA PARTIE sortie >==##"
                           }
                   },
- "synchrone"	: "",
+ "synchrone"	: "10000",
  "documentation":	{
 					"format des fichiers d'entree et de sortie" : "",
 					"acces algorithmes" : "",
 					"jeu de donnees de reference" 	: ""
 					},
- "commentaire" 	: ""
+ "commentaire" 	: "##==< METTRE UN COURT DESCRIPTIF DE L'INDICATEUR ET LES REFERENCES DE LA METHODE >==##"
 }

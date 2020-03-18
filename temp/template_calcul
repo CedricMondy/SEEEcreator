@@ -27,7 +27,7 @@ indic  <- ""
 vIndic <- ""
 
 ## CHARGEMENT DES PACKAGES ----
-dependencies <- c("dplyr")
+dependencies <- c("dplyr") ##==< SI BESOIN D'AUTRES PACKAGES, LES INCLURE ICI. ATTENTION A CE QU'ILS SOIENT BIEN INSTALLES SUR LE SERVEUR (VOIR SEEEcreator::package_server) >==##
 
 loadDependencies <- function(dependencies) {
   suppressAll <- function(expr) {
@@ -48,8 +48,11 @@ loadDependencies(dependencies)
 #> user, data
 ## IMPORT DES FICHIERS DE CONFIGURATION ----
 
+##==< IMPORTER ICI LES EVENTUELS FICHIERS DE CONFIGURATION (FICHIERS COMPRENANT _params DANS LEUR NOM) >==##
 
 ## DECLARATION DES FONCTIONS ----
+
+##==< AJOUTER ICI LES DEFINITIONS DES FONCTIONS PERMETTANT DE CALCULER L'INDICATEUR >==##
 
 ## Fonction permettant de faire les arrondis a l'inferieur si 0 a 4 et au superieur si 5 a 9
 funArrondi <- function (x, digits = 0) {
@@ -122,13 +125,15 @@ funResult 		<- function(indic, vIndic, heure_debut,
 options(warn = -1)
 
 # Recuperation du fichier d'entree
+##==< SI PLUSIEURS FICHIERS D'ENTREE AJOUTER LES DANS LES DEUX PARTIES (server et user) >==##
 #> server
 arguments      <- commandArgs(trailingOnly = TRUE)
 File           <- arguments[1]
-complementaire <- as.logical(arguments[2])
+complementaire <- as.logical(arguments[2]) ##==< SI PAS DE FICHIERS COMPLEMENTAIRES REMPLACER PAR FALSE >==##
+
 #> user
-File           <- ""
-complementaire <- FALSE
+File           <- "" ##==< REMPLACER PAR LE NOM DU FICHIER D'EXEMPLE INCLUT (AVEC _entree DANS SON NOM) >==##
+complementaire <- FALSE ##==< SI FICHIER DE RESULTAT COMPLEMENTAIRE REMPLACER PAR TRUE >==##
 
 #> server, user
 # Initialisation de l'heure
@@ -143,13 +148,14 @@ suppressWarnings(load(paste0(indic, "_", vIndic, "_calc_fun.RData")))
 # Import du fichier d'entree
 data_entree <- read.table(File, header = TRUE, sep = "\t",
                           stringsAsFactors = FALSE, quote = "\"",
+                          ##==< MODIFIER ICI EN FONCTION DES DONNEES D'ENTREE >==##
                           colClasses = c(CODE_OPERATION = "character",
                                          CODE_STATION   = "character",
                                          CODE_TAXON     = "character"))
 
 ## INITIALISATION DU FICHIER DE SORTIE ----
-paramsOut <- data.frame(CODE_PAR = c(),
-                        LIB_PAR  = c(),
+paramsOut <- data.frame(CODE_PAR = c(), ##==< METTRE ICI LES CODES SANDRE DES PARAMETRES >==##
+                        LIB_PAR  = c(), ##==< METTRE ICI LES LIBELLES COURTS DES PARAMETRES >==##
                         stringsAsFactors = FALSE)
 
 data_sortie <- funSortie(data_entree = data_entree,
@@ -160,11 +166,11 @@ data_sortie <- funSortie(data_entree = data_entree,
          DATE           = as.character(DATE))
 
 ## CALCUL DE L'INDICE ----
-resultats <-
+resultats <- ##==< APPELER ICI LES FONCTIONS PERMETTANT DE CALCULER L'INDICATEUR A PARTIR DES FICHIERS D'ENTREE ET DE PARAMETRE >==##
 
 ## RESULTATS COMPLEMENTAIRES ----
 if (complementaire) {
-  data_complementaire <- NULL
+  data_complementaire <- NULL ##==< SI BESOIN DE SORTIE COMPLEMENTAIRE REMPLACER NULL PAR LE CODE PERMETTANT DE LES OBTENIR >==##
 } else {
   data_complementaire <- NULL
 }
