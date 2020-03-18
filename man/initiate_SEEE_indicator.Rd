@@ -4,17 +4,24 @@
 \alias{initiate_SEEE_indicator}
 \title{Initiate a SEEE indicator}
 \usage{
-initiate_SEEE_indicator(indic, type = "Outil d'évaluation",
-  author = "", version = "1.0.0")
+initiate_SEEE_indicator(
+  indic,
+  type = "Outil d'évaluation",
+  author = "",
+  version = "1.0.0",
+  set_renv = FALSE
+)
 }
 \arguments{
-\item{indic}{string. The name of the indicator as it it will be used in
-SEEE}
+\item{indic}{string. The name of the indicator}
 
-\item{type}{string. The type of indicator (e.g. Outil d'évaluation, Outil
-de diagnostic, beta-test)}
+\item{type}{string. The type of indicator (e.g. Outil d'évaluation, Outil de
+diagnostic, beta-test)}
 
 \item{author}{string. The names of the indicator authors}
+
+\item{set_renv}{boolean. If TRUE, will set renv up installing the packages
+available on the SEEE server with the same version.}
 }
 \value{
 nothing. Writes in the current directory the template files necessary
