@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @importFrom checkpoint setSnapshot
+#' @importFrom renv init install snapshot
 #'
 #' @examples
 set_renv <- function(package_list = NULL) {
@@ -35,10 +36,11 @@ set_renv <- function(package_list = NULL) {
     # Default repository date for Microsoft R Open 3.5.3
     setSnapshot("2019-04-15")
 
-    renv::init(bare = TRUE,
+    init(bare = TRUE,
                restart = FALSE)
-    renv::install(packages = to_install,
+    install(packages = to_install,
             library = NULL,
             project = NULL)
+    snapshot()
 
 }
