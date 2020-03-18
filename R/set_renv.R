@@ -11,16 +11,17 @@
 #' @return
 #' @export
 #'
+#' @importFrom checkpoint setSnapshot
+#'
 #' @examples
 set_renv <- function(package_list = NULL) {
 
   if (is.null(package_list)) package_list <- SEEEcreator::package_server
 
-  # There is some issues with installing the sources of these package version
+  # There is some issues with installing the sources of the XML package version
   # installed on the SEEE server
-  if (package_list$Version[package_list$Package == "ranger"] == "0.9.0" |
-      package_list$Version[package_list$Package == "XML"] == "3.98-1.10") {
-    package_list$Version[package_list$Package %in% c("XML", "ranger")] <- ""
+  if (package_list$Version[package_list$Package == "XML"] == "3.98-1.10") {
+    package_list$Version[package_list$Package == "XML"] <- ""
   }
 
     to_install <- c(paste0(package_list$Package,
@@ -30,6 +31,9 @@ set_renv <- function(package_list = NULL) {
 
     cat("First installation can be long, be patient...\n    Packages to install:\n")
     print(to_install)
+
+    # Default repository date for Microsoft R Open 3.5.3
+    setSnapshot("2019-04-15")
 
     renv::init(bare = TRUE,
                restart = FALSE)
