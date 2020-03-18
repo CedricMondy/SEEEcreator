@@ -88,12 +88,14 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
   if (set_renv) {
     # May be problems to install some packages from sources
     pckg_issues <- c("XML", "ranger")
-    package_version$Version[package_version$Package %in% pckg_issues] <- ""
 
-    pckg_list <- c(paste0(package_version$Package,
-                        ifelse(package_version$Package  %in% pckg_issues,
+    pckg_server <- SEEEcreator::package_version
+    pckg_server$Version[pckg_server$Package %in% pckg_issues] <- ""
+
+    pckg_list <- c(paste0(pckg_server$Package,
+                        ifelse(pckg_server$Package  %in% pckg_issues,
                         "", "@"),
-                        package_version$Version),
+                        pckg_server$Version),
                    "CedricMondy/SEEEcreator")
 
     cat("First installation can be long, be patient...")
