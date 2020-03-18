@@ -2,8 +2,7 @@
 
 export(create_SEEE_export)
 export(initiate_SEEE_indicator)
+export(set_renv)
 importFrom(dplyr,"%>%")
-importFrom(renv,init)
-importFrom(renv,install)
 importFrom(rmarkdown,render)
 importFrom(utils,zip)

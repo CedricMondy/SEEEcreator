@@ -8,8 +8,7 @@ initiate_SEEE_indicator(
   indic,
   type = "Outil d'évaluation",
   author = "",
-  version = "1.0.0",
-  set_renv = FALSE
+  version = "1.0.0"
 )
 }
 \arguments{

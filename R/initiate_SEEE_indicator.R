@@ -15,10 +15,9 @@
 #' @return nothing. Writes in the current directory the template files necessary
 #'   to develop a SEEE indicator
 #'
-#' @importFrom renv init install
 #' @export
 #'
-initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author = "", version = "1.0.0", set_renv = FALSE){
+initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author = "", version = "1.0.0"){
   indic   <- enc2utf8(indic)
   type    <- enc2utf8(type)
   author  <- enc2utf8(author)
@@ -84,29 +83,4 @@ initiate_SEEE_indicator <- function(indic, type = "Outil d'évaluation", author 
   dir.create(path = "Tests",         showWarnings = FALSE)
   dir.create(path = "Exports",       showWarnings = FALSE)
 
-  # Set up renv if required
-  if (set_renv) {
-    # May be problems to install some packages from sources
-    pckg_issues <- c("XML", "ranger")
-
-    pckg_server <- SEEEcreator::package_version
-    pckg_server$Version[pckg_server$Package %in% pckg_issues] <- ""
-
-    pckg_list <- c(paste0(pckg_server$Package,
-                        ifelse(pckg_server$Package  %in% pckg_issues,
-                        "", "@"),
-                        pckg_server$Version),
-                   "CedricMondy/SEEEcreator")
-
-    cat("First installation can be long, be patient...")
-
-    init(bare = TRUE)
-    install(packages = pckg_list,
-            library = NULL,
-            rebuild = TRUE,
-            confirm = TRUE,
-            project = NULL)
-
-    print(package_version)
-  }
 }
