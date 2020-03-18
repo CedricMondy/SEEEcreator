@@ -13,6 +13,7 @@
 #' @importFrom dplyr "%>%"
 #' @importFrom utils zip
 #' @importFrom rmarkdown render
+#' @importFrom rstudioapi restartSession
 #' @export
 create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
@@ -82,4 +83,7 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
   # Clean up the directory
   file.remove(list.files(pattern = "_valid|_calc|_resultats|Format_echange_temp|radarPlots"))
+
+  detach_packages()
+  restartSession(command = "rm(list = ls()); cat('\f')")
 }
