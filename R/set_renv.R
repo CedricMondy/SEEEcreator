@@ -41,6 +41,6 @@ set_renv <- function(package_list = NULL) {
     install(packages = to_install,
             library = NULL,
             project = NULL)
-    snapshot()
+    snapshot(confirm = FALSE)
 
 }
