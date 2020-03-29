@@ -1,3 +1,0 @@
-- utiliser renv
-  - initiate_SEEE_indicator.R: renv::init()
-  - create_SEEE_export.R: renv::snapshot()
