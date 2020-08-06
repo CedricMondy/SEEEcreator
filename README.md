@@ -22,8 +22,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2020--03--29-yellowgreen.svg)](/commits/master)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.1.6-orange.svg?style=flat-square)](commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2020--08--06-yellowgreen.svg)](/commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.1.7-orange.svg?style=flat-square)](commits/master)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/SEEEcreator)](https://cran.r-project.org/package=SEEEcreator)
 <!-- badges: end -->
 
@@ -53,12 +53,6 @@ remotes::install_github("CedricMondy/SEEEcreator")
 
 ### Préparation des packages
 
-La version de R installée sur les serveurs du SEEE est antérieure à la
-3.6.0 qui a modifié le format de sauvegarde des données RData. Il faut
-donc s’assurer de travailler avec une version antérieure de R, la
-dernière version publiée avant ce changement est la 3.5.3, il est donc
-recommendé de l’utiliser.
-
 La première étape est de créer un projet RStudio dans un nouveau
 dossier.
 
@@ -67,9 +61,9 @@ dossier.
 
 Une fois le projet ouvert, commencer par installer les packages avec des
 versions compatibles à celles installées sur le serveur du SEEE. Pour
-celà, nous utilisaons la commande `SEEEcreator::set_renv()` qui va
+cela, nous utilisons la commande `SEEEcreator::set_renv()` qui va
 installer les packages dans la version spécifié dans
-`SEEEcreator::package_server` depuis un mirroir historisé du CRAN
+`SEEEcreator::package_server` depuis un miroir historisé du CRAN
 (<https://mran.microsoft.com/snapshot/2019-04-15>). Ces packages seront
 installés dans une librairie propre au projet et seront donc
 indépendants de l’installation générale de R.

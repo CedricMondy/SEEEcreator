@@ -45,13 +45,11 @@ remotes::install_github("CedricMondy/SEEEcreator")
 
 ### Préparation des packages
 
-La version de R installée sur les serveurs du SEEE est antérieure à la 3.6.0 qui a modifié le format de sauvegarde des données RData. Il faut donc s'assurer de travailler avec une version antérieure de R, la dernière version publiée avant ce changement est la 3.5.3, il est donc recommendé de l'utiliser.
-
 La première étape est de créer un projet RStudio dans un nouveau dossier. 
 
 > Il est recommandé de versionner le contenu de ce dossier en utilisant git pour lequel RStudio offre des fonctionnalités.
 
-Une fois le projet ouvert, commencer par installer les packages avec des versions compatibles à celles installées sur le serveur du SEEE. Pour celà, nous utilisaons la commande `SEEEcreator::set_renv()` qui va installer les packages dans la version spécifié dans `SEEEcreator::package_server` depuis un mirroir historisé du CRAN (https://mran.microsoft.com/snapshot/2019-04-15). Ces packages seront installés dans une librairie propre au projet et seront donc indépendants de l'installation générale de R. 
+Une fois le projet ouvert, commencer par installer les packages avec des versions compatibles à celles installées sur le serveur du SEEE. Pour cela, nous utilisons la commande `SEEEcreator::set_renv()` qui va installer les packages dans la version spécifié dans `SEEEcreator::package_server` depuis un miroir historisé du CRAN (https://mran.microsoft.com/snapshot/2019-04-15). Ces packages seront installés dans une librairie propre au projet et seront donc indépendants de l'installation générale de R. 
 
 ```{r}
 SEEEcreator::package_server

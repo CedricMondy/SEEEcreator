@@ -1,7 +1,7 @@
 Package: SEEEcreator
 Type: Package
 Title: Develop indicators for the French water body evaluation system (SEEE)
-Version: 0.1.6
+Version: 0.1.7
 Author: Cedric Mondy
 Maintainer: Cedric Mondy <cedric.mondy@ofb.gouv.fr>
 Description: This package creates the export files necessary to upload a new version of an indicator to the SEEE server.

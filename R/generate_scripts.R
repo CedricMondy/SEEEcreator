@@ -163,7 +163,7 @@ generate_scripts <- function(source,
 
       list1 <- ls()[!ls() %in% c("output", "temp_output")]
 
-      save(list = list1, file = output)
+      save(list = list1, file = output, version = 2)
 
     }
   }

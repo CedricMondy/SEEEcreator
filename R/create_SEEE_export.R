@@ -19,9 +19,6 @@ create_SEEE_export <- function(indic, additionalInput = NULL, test = FALSE) {
 
   r_version <- as.numeric(with(version, paste0(major, gsub(x = minor, pattern = ".", replacement = "", fixed = TRUE))))
 
-  if (r_version > 353)
-    stop("The R version on the SEEE server is not compatible with RData objects saved with recent versions of R. Please use a compatible version of R (3.5.3 is advised)")
-
   # Get the indicator version
   vIndic <- extract_version(indic)
 
